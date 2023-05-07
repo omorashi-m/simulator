@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>simulator</title>
+</head>
+
+<body>
+<script>
+    function random(i, time) {
+        var a = ((i * i * i) % 368 - i * 6);
+        if (a < 0)
+            a = -a;
+        a = (Math.pow(a, i % 10) + 12) * 4.56 + 7.987 + time;
+
+        a = (a * a + time) * (a - 1 + 1 / time);
+        a = Math.pow((a + time) * time, 1 / i);
+        a = a - Math.trunc(a);
+        for (var _ = 0; _ <= 10; _++) {
+            a = a * 10;
+            a = a - Math.trunc(a);
+        }
+        return (a - Math.trunc(a));
+    }
+
+    function getRandomTime(timeNewArr, idnum) {
+
+        var position = random(idnum, 1) * (timeNewArr.length - 1);
+
+        //document.write(position+"<br>");
+        //document.write("b"+idnum);
+        return timeNewArr[Math.trunc(position)] + (timeNewArr[Math.trunc(position) + 1] - timeNewArr[Math.trunc(position)]) * (position - Math.trunc(position));
+    }
+
+    var carryTimeArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10.7, 11.4, 13, 15.5, 17, 18];
+
+    // var randomNum = 6.89;
+    var ms = new Date().getTime();
+    //document.write (ms);
+    var randomNum = (ms - Math.trunc(ms / 10000) * 10000) / 100;
+
+    //document.write (randomNum);
+    var carryTime = getRandomTime(carryTimeArr, randomNum);
+    if (carryTime < 10) carryTime = 0;
+
+    var delayTimeArr = [2.5, 3, 3.1, 3.6, 3.8, 4, 4.2, 4.3, 4.9, 6, 7.8, 8];
+    var delayTime = getRandomTime(delayTimeArr, randomNum + 1);
+
+    var endTime = 0;
+    if (carryTime > 0) {
+        endTime = carryTime + delayTime;
+    }
+
+    var carryTimeArr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 12, 14, 14.5, 15.7, 17, 18];
+    var carryTime2 = getRandomTime(carryTimeArr2, randomNum + 4);
+    if (carryTime2 < 10) carryTime2 = 0;
+
+    var delayTimeArr2 = [2.5, 3.5, 5, 6.5, 7, 7.1, 7.2, 7.4, 7.5, 7.7, 7.9, 8];
+    var delayTime2 = getRandomTime(delayTimeArr2, randomNum + 7);
+    var endTime2 = 0;
+    if (carryTime2 > 0) {
+        endTime2 = carryTime2 + delayTime2;
+    }
+    document.write(carryTime + "<br>" + endTime + "<br>" + carryTime2 + "<br>" + endTime2);
+</script>
+
+
+<div id="timediv" style="top:200px;left:17px;position:absolute;font-size:45px">00:00</div>
+
+<div style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
+
+<div id="liquiddiv" style="top:300px;left:217px;position:absolute;font-size:45px">0</div>
+
+<div style="top:300px;left:517px;position:absolute;font-size:45px">Trousers:</div>
+
+<div id="trousersdiv" style="top:300px;left:817px;position:absolute;font-size:45px">0</div>
+
+<div style="top:400px;left:517px;position:absolute;font-size:45px">Tro-Score:</div>
+
+<div id="trousersScorediv" style="top:400px;left:817px;position:absolute;font-size:45px">0</div>
+
+<div style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
+
+
+<div id="paintScorediv" style="top:400px;left:267px;position:absolute;font-size:45px">0</div>
+
+<div style="top:400px;left:17px;position:absolute;font-size:45px">Pai-Sco:</div>
+
+<div id="word1" style="top:10px;left:317px;position:absolute;font-size:45px;color:blue">Partner Coming</div>
+
+<div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink">GirlFriend Coming</div>
+
+<img id="pic1" src="pic/100.png" style="top:555px;left:17px;position:absolute" alt="picture 1"/>
+
+<img id="pic2" src="pic/T00.png" style="top:555px;left:517px;position:absolute" alt="picture 2"/>
+
+<script>
+    function transNumberToTime(i) {
+        var hour = Math.trunc(i);
+        var minute = Math.trunc((i - hour) * 60);
+        var second = Math.trunc((i - hour - minute / 60) * 3600);
+        if (hour >= 24) hour = hour - 24;
+        var result = "";
+        if (hour <= 9) result = result + "0";
+        result = result + hour + ":";
+        if (minute <= 9) result = result + "0";
+        result = result + minute;
+
+        result = result + ":";
+        if (second <= 9) result = result + "0";
+        result = result + second;
+
+        if (i >= 24) result = result + " Next Day";
+        return result;
+    }
+
+    var nowTime = 0;
+    var gameInterval = 0.012;
+    var refreshTime = 100;
+    var liquid = 0;
+    var trousers = 0;
+    var troScore = 0;
+    var canToilet = true;
+    var wordShow = "";
+    var paintScore = 0;
+
+    function goToliet() {
+        if (liquid >= 150) {
+            wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid) + " liter";
+            document.getElementById("wordShowArea").innerText = wordShow;
+            liquid = 0;
+        }
+    }
+
+    function goTrousers() {
+        if (liquid >= 450) {
+            wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
+            document.getElementById("wordShowArea").innerText = wordShow;
+            liquid = 0;
+            trousers = 1;
+        }
+    }
+
+    function interval() {
+        nowTime = nowTime + gameInterval;
+        if (nowTime < 9.5 || nowTime > 25)
+            gameInterval = 0.125;
+        else if (canToilet) {
+            gameInterval = 0.03;
+        } else {
+            gameInterval = 0.008;
+        }
+        document.getElementById("timediv").innerText = transNumberToTime(nowTime);
+        if (nowTime > 30) {
+            clearInterval(t);
+
+            wordShow = wordShow + "\r\n--------game end-------";
+            if (carryTime > 0) {
+                wordShow = wordShow + "\r\nPartner come " + transNumberToTime(carryTime);
+                wordShow = wordShow + "\r\nPartner leave " + transNumberToTime(endTime);
+            }
+            if (carryTime2 > 0) {
+                wordShow = wordShow + "\r\nGirlFriend come " + transNumberToTime(carryTime2);
+                wordShow = wordShow + "\r\nGirlFriend leave " + transNumberToTime(endTime2);
+            }
+
+            document.getElementById("wordShowArea").innerText = wordShow;
+        }
+
+        var tolietIntervalArr = [1.5, 2.1, 2.3, 2.4, 2.5, 2.8, 3.2, 3.5, 3.6, 4, 5];
+
+        var tolietInterval = getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+
+        liquid = liquid + 350 / tolietInterval * gameInterval;
+        document.getElementById("liquiddiv").innerText = Math.trunc(liquid).toString();
+
+        trousers = trousers - 1 / 5 * gameInterval;
+        if (trousers < 0) trousers = 0;
+        if (liquid > 750) {
+            goTrousers();
+        }
+        document.getElementById("trousersdiv").innerText = (Math.trunc(trousers * 1000) / 1000).toString();
+        troScore = troScore + trousers * gameInterval;
+        document.getElementById("trousersScorediv").innerText = (Math.trunc(troScore * 1000) / 1000).toString();
+
+        if (liquid >= 500)
+            paintScore = paintScore + (liquid - 480) * gameInterval;
+        document.getElementById("paintScorediv").innerText = (Math.trunc(paintScore * 1000) / 1000).toString();
+
+        canToilet = true;
+        if (nowTime >= carryTime && nowTime <= endTime) {
+            document.getElementById("word1").style.display = "block";
+            canToilet = false;
+        } else {
+            document.getElementById("word1").style.display = "none";
+        }
+
+        if (nowTime >= carryTime2 && nowTime <= endTime2) {
+            document.getElementById("word2").style.display = "block";
+            canToilet = false;
+        } else {
+            document.getElementById("word2").style.display = "none";
+        }
+
+        if (liquid >= 400 && canToilet) {
+            goToliet();
+        }
+
+        document.getElementById("btnToliet").disabled = !canToilet;
+
+        if (liquid >= 0 && liquid <= 100) {
+            document.getElementById("pic1").src = "pic/100.png";
+        } else if (liquid > 100 && liquid <= 200) {
+            document.getElementById("pic1").src = "pic/200.png";
+        } else if (liquid > 200 && liquid <= 300) {
+            document.getElementById("pic1").src = "pic/300.png";
+        } else if (liquid > 300 && liquid <= 400) {
+            document.getElementById("pic1").src = "pic/400.png";
+        } else if (liquid > 400 && liquid <= 500) {
+            document.getElementById("pic1").src = "pic/500.png";
+        } else if (liquid > 500 && liquid <= 600) {
+            document.getElementById("pic1").src = "pic/600.png";
+        } else if (liquid > 600 && liquid <= 700) {
+            document.getElementById("pic1").src = "pic/700.png";
+        }
+
+        if (trousers >= 0 && trousers <= 0) {
+            document.getElementById("pic2").src = "pic/T00.png";
+        } else if (trousers >= 0 && trousers <= 0.15) {
+            document.getElementById("pic2").src = "pic/T15.png";
+        } else if (trousers >= 0.15 && trousers <= 0.30) {
+            document.getElementById("pic2").src = "pic/T30.png";
+        } else if (trousers >= 0.30 && trousers <= 0.55) {
+            document.getElementById("pic2").src = "pic/T55.png";
+        } else if (trousers >= 0.55 && trousers <= 0.70) {
+            document.getElementById("pic2").src = "pic/T70.png";
+        } else if (trousers >= 0.70 && trousers <= 0.85) {
+            document.getElementById("pic2").src = "pic/T85.png";
+        } else if (trousers >= 0.85 && trousers <= 1.00) {
+            document.getElementById("pic2").src = "pic/T99.png";
+        }
+    }
+
+    var t = setInterval(interval, refreshTime);
+</script>
+
+<div id="wordShowArea" style="top:150px;left:917px;position:absolute;font-size:20px;"></div>
+
+<div id="tolietBtnDiv" style="top:100px;left:917px;position:absolute;font-size:20px;">
+    <input type="button" id="btnToliet" value="toilet" onclick="goToliet()">
+</div>
+
+<div id="trousersBtnDiv" style="top:100px;left:1017px;position:absolute;font-size:20px;">
+    <input type="button" id="btnTrousers" value="trousers" onclick="goTrousers()">
+</div>
+
+</body>
+</html>
