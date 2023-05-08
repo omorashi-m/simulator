@@ -91,9 +91,9 @@
 
 <div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink">GirlFriend Coming</div>
 
-<img id="pic1" src="pic/100.png" style="top:555px;left:17px;position:absolute" alt="picture 1"/>
+<!-- <img id="pic1" src="pic/100.png" style="top:555px;left:17px;position:absolute" alt="picture 1"/> -->
 
-<img id="pic2" src="pic/T00.png" style="top:555px;left:517px;position:absolute" alt="picture 2"/>
+<!-- <img id="pic2" src="pic/T00.png" style="top:555px;left:517px;position:absolute" alt="picture 2"/> -->
 
 <script>
     function transNumberToTime(i) {
@@ -208,7 +208,7 @@
         }
 
         document.getElementById("btnToliet").disabled = !canToilet;
-
+        /*
         if (liquid >= 0 && liquid <= 100) {
             document.getElementById("pic1").src = "pic/100.png";
         } else if (liquid > 100 && liquid <= 200) {
@@ -240,6 +240,7 @@
         } else if (trousers >= 0.85 && trousers <= 1.00) {
             document.getElementById("pic2").src = "pic/T99.png";
         }
+        */
     }
 
     var t = setInterval(interval, refreshTime);
