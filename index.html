@@ -33,7 +33,7 @@
         return timeNewArr[Math.trunc(position)] + (timeNewArr[Math.trunc(position) + 1] - timeNewArr[Math.trunc(position)]) * (position - Math.trunc(position));
     }
 
-    var carryTimeArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10.7, 11.4, 13, 15.5, 17, 18];
+    var carryTimeArr = [0, 1];
 
     // var randomNum = 6.89;
     var ms = new Date().getTime();
@@ -42,31 +42,37 @@
 
     //document.write (randomNum);
     var carryTime = getRandomTime(carryTimeArr, randomNum);
-    if (carryTime < 10) carryTime = 0;
-
-    var delayTimeArr = [2.5, 3, 3.1, 3.6, 3.8, 4, 4.2, 4.3, 4.9, 6, 7.8, 8];
-    var delayTime = getRandomTime(delayTimeArr, randomNum + 1);
-
-    var endTime = 0;
-    if (carryTime > 0) {
-        endTime = carryTime + delayTime;
+    if (carryTime < 0.5) {
+        carryTime = 10
+    } else {
+        carryTime = 16
     }
 
-    var carryTimeArr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 12, 14, 14.5, 15.7, 17, 18];
-    var carryTime2 = getRandomTime(carryTimeArr2, randomNum + 4);
-    if (carryTime2 < 10) carryTime2 = 0;
+    /* var delayTimeArr = [3, 3,3.05, 3.1, 3.2,3.3,3.4,3.5, 3.6, 3.7,3.8, 3.9,4,4.6, 6,6];
+     var delayTime = getRandomTime(delayTimeArr, randomNum + 1);
 
-    var delayTimeArr2 = [2.5, 3.5, 5, 6.5, 7, 7.1, 7.2, 7.4, 7.5, 7.7, 7.9, 8];
-    var delayTime2 = getRandomTime(delayTimeArr2, randomNum + 7);
-    var endTime2 = 0;
-    if (carryTime2 > 0) {
-        endTime2 = carryTime2 + delayTime2;
-    }
-    document.write(carryTime + "<br>" + endTime + "<br>" + carryTime2 + "<br>" + endTime2);
+     var endTime = 0;
+     if (carryTime > 0) {
+         endTime = carryTime + delayTime;
+     }
+
+     var carryTime2 =26-carryTime;
+
+     var delayTimeArr2 = [3,4,5.1,5.2,5.3,5.4,5.5,5.6,5.7,5.8,5.9,5.95,6,6,6,6];
+     var delayTime2 = getRandomTime(delayTimeArr2, randomNum + 7);
+     var endTime2 = 0;
+     if (carryTime2 > 0) {
+         endTime2 = carryTime2 + delayTime2;
+     }
+     document.write(carryTime + "<br>" + endTime + "<br>" + carryTime2 + "<br>" + endTime2);*/
 </script>
 
 
 <div id="timediv" style="top:200px;left:17px;position:absolute;font-size:45px">00:00</div>
+
+<div style="top:200px;left:517px;position:absolute;font-size:45px">Interval:</div>
+
+<div id="Intervaldiv" style="top:200px;left:817px;position:absolute;font-size:45px"></div>
 
 <div style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
 
@@ -76,7 +82,7 @@
 
 <div id="trousersdiv" style="top:300px;left:817px;position:absolute;font-size:45px">0</div>
 
-<div style="top:400px;left:517px;position:absolute;font-size:45px">Tro-Score:</div>
+<div style="top:400px;left:517px;position:absolute;font-size:45px">TroScore:</div>
 
 <div id="trousersScorediv" style="top:400px;left:817px;position:absolute;font-size:45px">0</div>
 
@@ -85,17 +91,72 @@
 
 <div id="paintScorediv" style="top:400px;left:267px;position:absolute;font-size:45px">0</div>
 
-<div style="top:400px;left:17px;position:absolute;font-size:45px">Pai-Sco:</div>
+<div style="top:400px;left:17px;position:absolute;font-size:45px">PainScore:</div>
 
-<div id="word1" style="top:10px;left:317px;position:absolute;font-size:45px;color:blue">Partner Coming</div>
+<div id="word1" style="top:10px;left:317px;position:absolute;font-size:45px;color:blue">Maths Lesson</div>
 
-<div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink">GirlFriend Coming</div>
+<div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink">English Lesson</div>
+
+<div id="word3" style="top:210px;left:317px;position:absolute;font-size:45px;color:black">PE Lesson</div>
+
 
 <!-- <img id="pic1" src="pic/100.png" style="top:555px;left:17px;position:absolute" alt="picture 1"/> -->
 
 <!-- <img id="pic2" src="pic/T00.png" style="top:555px;left:517px;position:absolute" alt="picture 2"/> -->
 
+
+<div id="wordShowArea" style="top:550px;left:117px;position:absolute;font-size:25px;"></div>
+
+<div id="lessonShowArea" style="top:550px;left:617px;position:absolute;font-size:25px;"></div>
+
+
+<div id="tolietBtnDiv" style="top:500px;left:117px;position:absolute;font-size:20px;">
+    <input type="button" id="btnToliet" value="toilet" onclick="goToliet()" style="height:30px;width:70px;">
+</div>
+
+<div id="trousersBtnDiv" style="top:500px;left:417px;position:absolute;font-size:20px;">
+    <input type="button" id="btnTrousers" value="trousers" onclick="goTrousers()" style="height:30px;width:70px;">
+</div>
+
+<div id="intvldiv"
+     style="top:200px;left:1050px;height:60px;width:30px;position:absolute;border:2px solid red;background:red">
+    <!--111--></div>
+
+<div style="top:100px;left:1050px;height:160px;width:30px;position:absolute;border:2px solid black"> <!--222--></div>
+
+
+<div id="liquidLongDiv"
+     style="top:300px;left:400px;height:60px;width:30px;position:absolute;border:2px solid red;background:red">
+    <!--111--></div>
+
+<div style="top:200px;left:400px;height:160px;width:30px;position:absolute;border:2px solid black"> <!--222--></div>
+
 <script>
+
+    function setInvlTop(i) {
+        document.getElementById("intvldiv").style["top"] = 260 - i + "px";
+        document.getElementById("intvldiv").style["height"] = i + "px";
+
+    }
+
+    function setLiquidTop(i) {
+        document.getElementById("liquidLongDiv").style["top"] = 360 - i + "px";
+        document.getElementById("liquidLongDiv").style["height"] = i + "px";
+        if (i < 0) i = 0;
+        if (i > 160) i = 160;
+        var redNumber = Math.trunc(i / 160 * 255);
+        var greenNumber = Math.trunc(255 - i / 160 * 255);
+        var redColor = redNumber.toString(16);
+        if (redNumber <= 15) redColor = "0" + redColor;
+        var greenColor = greenNumber.toString(16);
+        if (greenNumber <= 15) greenColor = "0" + greenColor;
+
+        var color = "#" + redColor + "" + greenColor + "00";
+        document.getElementById("liquidLongDiv").style["background-color"] = color;
+        document.getElementById("liquidLongDiv").style["border"] = "2px solid " + color;
+    }
+
+
     function transNumberToTime(i) {
         var hour = Math.trunc(i);
         var minute = Math.trunc((i - hour) * 60);
@@ -115,6 +176,19 @@
         return result;
     }
 
+    function transNumberToTimeMinute(i) {
+        var hour = Math.trunc(i);
+        var minute = Math.trunc((i - hour) * 60);
+        if (hour >= 24) hour = hour - 24;
+        var result = "";
+        if (hour <= 9) result = result + "0";
+        result = result + hour + ":";
+        if (minute <= 9) result = result + "0";
+        result = result + minute;
+
+        return result;
+    }
+    var i = 0;
     var nowTime = 0;
     var gameInterval = 0.012;
     var refreshTime = 100;
@@ -125,59 +199,177 @@
     var wordShow = "";
     var paintScore = 0;
 
+    var lessonNum = [];
+    var PELesson = Math.trunc(random(randomNum, 12) * 7);
+    //console.log("PE="+PELesson);
+    for (i = 0; i <= 6; i++) {
+        if (i === PELesson) {
+            lessonNum[i] = 3;
+        } else {
+            var tempRandom = Math.random();
+            //console.log("tempRandom"+tempRandom);
+            if (tempRandom <= 0.5) {
+                lessonNum[i] = 1;
+            } else {
+                lessonNum[i] = 2;
+            }
+        }
+        //console.log("lessonNum "+i+" "+lessonNum[i]);
+    }
+
+    var startTimes = [8.5, 9.3334, 10.167, 11.084, 12.75, 13.917, 14.834];
+    var naturalEndTimes = [9.167, 10, 10.917, 11.75, 13.75, 14.667, 15.5];
+    var endTimes = [9.167, 10, 10.917, 11.75, 13.75, 14.667, 15.5];
+
+    for (i = 0; i <= 6; i++) {
+        var delayMinuteArr;
+        if (lessonNum[i] == 1) {
+            delayMinuteArr = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 2, 3, 4, 7, 10, 15, 25];
+        } else if (lessonNum[i] == 2) {
+            delayMinuteArr = [0, 2, 4, 6, 7, 8, 8.5, 8, 8, 9, 9.5, 10, 12, 15, 25];
+        } else {
+            delayMinuteArr = [0, 0, 0];
+        }
+        var delayMinute = getRandomTime(delayMinuteArr, randomNum + 9 + i);
+        endTimes[i] = endTimes[i] + delayMinute / 60;
+        if (endTimes[i] > startTimes[i + 1])
+            endTimes[i] = startTimes[i + 1];
+        //console.log("endTimes "+i+" "+endTimes[i]);
+        //console.log("delayMinute "+i+" "+delayMinute);
+    }
+
+    var lessonsShow = "Timetable";
+    for (i = 0; i <= 6; i++) {
+        var word = "";
+        word = word + "[" + (i + 1) + "] " + transNumberToTimeMinute(startTimes[i]) + "---" + transNumberToTimeMinute(naturalEndTimes[i]) + "  ";
+        if (lessonNum[i] == 1) {
+            word = word + "Maths";
+        }
+        if (lessonNum[i] == 2) {
+            word = word + "English";
+        }
+        if (lessonNum[i] == 3) {
+            word = word + "PE";
+        }
+        if (i == 4) {
+            lessonsShow = lessonsShow + "\r\n" + "-----------------------";
+        }
+        lessonsShow = lessonsShow + "\r\n" + word;
+        //alert(i+" "+lessonsShow);
+        document.getElementById("lessonShowArea").innerText = lessonsShow;
+
+    }
+
     function goToliet() {
         if (liquid >= 150) {
-            wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid) + " liter";
-            document.getElementById("wordShowArea").innerText = wordShow;
+            if (nowTime >= 7.5 && nowTime <= 17) {
+                wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid) + " liter";
+                document.getElementById("wordShowArea").innerText = wordShow;
+            }
             liquid = 0;
         }
     }
 
     function goTrousers() {
         if (liquid >= 450) {
-            wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
-            document.getElementById("wordShowArea").innerText = wordShow;
+            if (nowTime >= 7.5 && nowTime <= 17) {
+                wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
+                document.getElementById("wordShowArea").innerText = wordShow;
+            }
             liquid = 0;
             trousers = 1;
         }
     }
 
+    // var lastCalTolietTime = 0;
+    var lastToiletInterval = 0.7;
+
     function interval() {
         nowTime = nowTime + gameInterval;
-        if (nowTime < 9.5 || nowTime > 25)
-            gameInterval = 0.125;
+        if (nowTime < 8 || nowTime > 17)
+            gameInterval = 0.17;
         else if (canToilet) {
-            gameInterval = 0.03;
+            gameInterval = 0.02;
         } else {
             gameInterval = 0.008;
         }
+
+        //gameInterval = 0.9;//test the end
         document.getElementById("timediv").innerText = transNumberToTime(nowTime);
         if (nowTime > 30) {
             clearInterval(t);
 
-            wordShow = wordShow + "\r\n--------game end-------";
-            if (carryTime > 0) {
-                wordShow = wordShow + "\r\nPartner come " + transNumberToTime(carryTime);
-                wordShow = wordShow + "\r\nPartner leave " + transNumberToTime(endTime);
-            }
-            if (carryTime2 > 0) {
-                wordShow = wordShow + "\r\nGirlFriend come " + transNumberToTime(carryTime2);
-                wordShow = wordShow + "\r\nGirlFriend leave " + transNumberToTime(endTime2);
-            }
+            wordShow = wordShow + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore * 1000) / 1000).toString() + " and TrouesrsScore:" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
 
             document.getElementById("wordShowArea").innerText = wordShow;
+
+            var lessonsShow1 = "Timetable";
+            for (i = 0; i <= 6; i++) {
+                var span = false;
+                var word = "";
+                if (endTimes[i] >= startTimes[i + 1] - 0.9 / 60) {
+                    span = true;
+                    // word = word + "<font color='red'>";
+                    word += "<span style='color: red'>"
+                } else if (endTimes[i] >= startTimes[i + 1] - 2 / 60) {
+                    span = true;
+                    // word = word + "<font color='GoldenRod'>";
+                    word += "<span style='color: goldenrod'>"
+                }
+                word = word + "[" + (i + 1) + "] " + transNumberToTimeMinute(startTimes[i]) + "---" + transNumberToTimeMinute(naturalEndTimes[i]) + "  ";
+                if (lessonNum[i] == 1) {
+                    word = word + "Maths";
+                }
+                if (lessonNum[i] == 2) {
+                    word = word + "English";
+                }
+                if (lessonNum[i] == 3) {
+                    word = word + "PE";
+                }
+                word = word + " end at " + transNumberToTime(endTimes[i]);
+                if (span) {
+                    word += "</span>"
+                }
+                if (i == 4) {
+                    lessonsShow1 = lessonsShow1 + "<br>" + "-----------------------";
+                }
+                lessonsShow1 = lessonsShow1 + "<br>" + word;
+                //alert(i+" "+lessonsShow);
+                document.getElementById("lessonShowArea").innerHTML = lessonsShow1;
+
+            }
         }
 
-        var tolietIntervalArr = [1.5, 2.1, 2.3, 2.4, 2.5, 2.8, 3.2, 3.5, 3.6, 4, 5];
+        //var tolietIntervalArr = [1.5,  2.5, 2.8, 3.2, 3.5, 3.6,3.7,3.8,3.9,3.95, 4,4.1,4.2,4.5, 5,6];
+        //var tolietIntervalArr = [0.5,0.8,1,1.5,2.5];
+        var tolietIntervalArr = [-0.16, -0.15, -0.13, -0.1, -0.09, -0.08, -0.07, -0.05, -0.02, -0.015, -0.01, -0.005, 0, 0.1, 0.2, 0.3, 0.4, 0.45];
+        var tolietInterval;//= lastToiletInterval;
+        /*   if (Math.trunc(nowTime)!=lastCalTolietTime){
+               tolietInterval = getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+               lastToiletInterval=tolietInterval;
+               lastCalTolietTime=Math.trunc(nowTime);
+           }
+      */
 
-        var tolietInterval = getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+        tolietInterval = lastToiletInterval + getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+        if (tolietInterval > 2) {
+            tolietInterval = 2;
+        }
+        if (tolietInterval < 0.4) {
+            tolietInterval = 0.4;
+        }
+
+        document.getElementById("Intervaldiv").innerText = (Math.trunc(tolietInterval * 1000) / 1000).toString();
+        setInvlTop(tolietInterval * 60);
 
         liquid = liquid + 350 / tolietInterval * gameInterval;
         document.getElementById("liquiddiv").innerText = Math.trunc(liquid).toString();
+        setLiquidTop(liquid * 0.25);
+
 
         trousers = trousers - 1 / 5 * gameInterval;
         if (trousers < 0) trousers = 0;
-        if (liquid > 750) {
+        if (liquid > 650) {
             goTrousers();
         }
         document.getElementById("trousersdiv").innerText = (Math.trunc(trousers * 1000) / 1000).toString();
@@ -189,7 +381,7 @@
         document.getElementById("paintScorediv").innerText = (Math.trunc(paintScore * 1000) / 1000).toString();
 
         canToilet = true;
-        if (nowTime >= carryTime && nowTime <= endTime) {
+        /*if (nowTime >= carryTime && nowTime <= endTime) {
             document.getElementById("word1").style.display = "block";
             canToilet = false;
         } else {
@@ -202,9 +394,57 @@
         } else {
             document.getElementById("word2").style.display = "none";
         }
+*/
+        var inLesson = false;
+        for (i = 0; i <= 6; i++) {
+            if (nowTime >= startTimes[i] && nowTime <= endTimes[i]) {
+                //console.log("lesson"+i+"nowTime="+nowTime+",startTimes[i]="+startTimes[i]+",endTimes[i]="+endTimes[i]);
+                if (lessonNum[i] == 1) {
+                    document.getElementById("word1").style.display = "block";
+                    document.getElementById("word2").style.display = "none";
+                    document.getElementById("word3").style.display = "none";
+                    canToilet = false;
+                    inLesson = true;
+                } else if (lessonNum[i] == 2) {
+                    document.getElementById("word1").style.display = "none";
+                    document.getElementById("word2").style.display = "block";
+                    document.getElementById("word3").style.display = "none";
+                    canToilet = false;
+                    inLesson = true;
+                } else if (lessonNum[i] == 3) {
+                    document.getElementById("word1").style.display = "none";
+                    document.getElementById("word2").style.display = "none";
+                    document.getElementById("word3").style.display = "block";
+                    canToilet = true;
+                    inLesson = true;
+                }
 
-        if (liquid >= 400 && canToilet) {
-            goToliet();
+
+            } else {
+                // console.log("nowTime="+nowTime+",startTimes[i]="+startTimes[i]+",endTimes[i]="+endTimes[i]);
+            }
+            if (!inLesson) {
+                document.getElementById("word1").style.display = "none";
+                document.getElementById("word2").style.display = "none";
+                document.getElementById("word3").style.display = "none";
+                canToilet = true;
+            }
+        }
+
+
+        var nowGoToliet = false;
+        if (liquid >= 350 && canToilet) {
+            nowGoToliet = true;
+
+        }
+        if (liquid >= 200 && canToilet && nowTime > 8.1 && nowTime < 15 && !inLesson) {
+            nowGoToliet = true;
+
+
+        }
+
+        if (nowGoToliet) {
+            goToliet()
         }
 
         document.getElementById("btnToliet").disabled = !canToilet;
@@ -224,7 +464,6 @@
         } else if (liquid > 600 && liquid <= 700) {
             document.getElementById("pic1").src = "pic/700.png";
         }
-
         if (trousers >= 0 && trousers <= 0) {
             document.getElementById("pic2").src = "pic/T00.png";
         } else if (trousers >= 0 && trousers <= 0.15) {
@@ -245,16 +484,6 @@
 
     var t = setInterval(interval, refreshTime);
 </script>
-
-<div id="wordShowArea" style="top:150px;left:917px;position:absolute;font-size:20px;"></div>
-
-<div id="tolietBtnDiv" style="top:100px;left:917px;position:absolute;font-size:20px;">
-    <input type="button" id="btnToliet" value="toilet" onclick="goToliet()">
-</div>
-
-<div id="trousersBtnDiv" style="top:100px;left:1017px;position:absolute;font-size:20px;">
-    <input type="button" id="btnTrousers" value="trousers" onclick="goTrousers()">
-</div>
 
 </body>
 </html>
