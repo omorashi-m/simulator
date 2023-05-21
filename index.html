@@ -149,7 +149,6 @@
         document.getElementById("liquidLongDiv").style["border"] = "2px solid " + color;
     }
 
-
     function transNumberToTime(i) {
         var hour = Math.trunc(i);
         var minute = Math.trunc((i - hour) * 60);
@@ -182,10 +181,11 @@
         return result;
     }
 
+    const threshold = 450.0;
     var i = 0;
     var nowTime = 7.5;
     var gameInterval = 0.012;
-    var refreshTime = 10;
+    var refreshTime = 100;
     var liquid = 0;
     var trousers = 0;
     var troScore = 0;
@@ -295,13 +295,14 @@
     }
 
     function goTrousers() {
-        if (liquid >= 450) {
+        if (liquid >= threshold) {
             if (nowTime >= 7.5 && nowTime <= 17) {
                 wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
                 document.getElementById("wordShowArea").innerText = wordShow;
             }
             liquid = 0;
             trousers = 1;
+            troScore += 100;
         }
     }
 
@@ -311,7 +312,7 @@
     function interval() {
         nowTime = nowTime + gameInterval;
         if (nowTime < 8 || nowTime > 17)
-            gameInterval = 0.17;
+            gameInterval = 0.2;
         else if (canToilet) {
             gameInterval = 0.02;
         } else {
@@ -387,19 +388,19 @@
         setInvlTop(tolietInterval * 60);
 
         liquid = liquid + 350 / tolietInterval * gameInterval;
+        document.getElementById("btnTrousers").disabled = (liquid < threshold);
         document.getElementById("liquiddiv").innerText = Math.trunc(liquid).toString();
         setLiquidTop(liquid * 0.25);
-
 
         trousers = trousers - 1 / 5 * gameInterval;
         if (trousers < 0) trousers = 0;
 
         document.getElementById("trousersdiv").innerText = (Math.trunc(trousers * 1000) / 1000).toString();
-        troScore = troScore + trousers * gameInterval;
+        troScore = troScore + trousers * gameInterval * 60;
         document.getElementById("trousersScorediv").innerText = (Math.trunc(troScore * 1000) / 1000).toString();
 
-        if (liquid >= 500)
-            paintScore = paintScore + (liquid - 480) * gameInterval;
+        if (liquid >= threshold)
+            paintScore = paintScore + 10 * (liquid - threshold) * gameInterval;
         document.getElementById("paintScorediv").innerText = (Math.trunc(paintScore * 1000) / 1000).toString();
 
         canToilet = true;
