@@ -64,37 +64,48 @@
      document.write(carryTime + "<br>" + endTime + "<br>" + carryTime2 + "<br>" + endTime2);*/
 </script>
 
+<div id="choosediv" style="top:10px;left:10px;position:absolute;font-size:20px"><span id="span0">Choose:</span>
+    <br> <label id="span1" for="chooseInterval">Game Interval: </label> <input id="chooseInterval" type="number" min="0" max="100" value="45"> <span id="span2">seconds (How many seconds of game time is per refresh)</span><br>
+    <label id="span3" for="chooseSpeed">Game Speed: </label><input id="chooseSpeed" type="number" min="0" max="100" value="100"> <span id="span4">milliseconds (How many milliseconds of real time between per refresh)</span><br>
+    <label id="label4lang" for="chooseLang">Language: </label>
+    <select id="chooseLang" onchange="switchLang()">
+        <option value="0">English</option>
+        <option value="1">Chinese</option>
+        <option value="2">Chinese(Sweet)</option>
+    </select>
+    <br>
+    <input type="button" value="Start" onclick="startGame()">
+
+</div>
 
 <div id="timediv" style="top:200px;left:17px;position:absolute;font-size:45px">00:00</div>
 
-<div style="top:200px;left:517px;position:absolute;font-size:45px">Interval:</div>
+<div id="word01" style="top:200px;left:517px;position:absolute;font-size:45px">Interval:</div>
 
 <div id="Intervaldiv" style="top:200px;left:817px;position:absolute;font-size:45px"></div>
 
-<div style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
+<div id="word02" style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
 
 <div id="liquiddiv" style="top:300px;left:217px;position:absolute;font-size:45px">0</div>
 
-<div style="top:300px;left:517px;position:absolute;font-size:45px">Trousers:</div>
+<div id="word03" style="top:300px;left:517px;position:absolute;font-size:45px">Trousers:</div>
 
 <div id="trousersdiv" style="top:300px;left:817px;position:absolute;font-size:45px">0</div>
 
-<div style="top:400px;left:517px;position:absolute;font-size:45px">TroScore:</div>
+<div id="word04" style="top:400px;left:517px;position:absolute;font-size:45px">TroScore:</div>
 
 <div id="trousersScorediv" style="top:400px;left:817px;position:absolute;font-size:45px">0</div>
-
-<div style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
 
 
 <div id="paintScorediv" style="top:400px;left:267px;position:absolute;font-size:45px">0</div>
 
-<div style="top:400px;left:17px;position:absolute;font-size:45px">PainScore:</div>
+<div id="word05" style="top:400px;left:17px;position:absolute;font-size:45px">PainScore:</div>
 
-<div id="word1" style="top:10px;left:317px;position:absolute;font-size:45px;color:blue">Maths Lesson</div>
+<div id="word1" style="top:110px;left:317px;position:absolute;font-size:45px;color:blue;display:none">Maths Lesson</div>
 
-<div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink">English Lesson</div>
+<div id="word2" style="top:110px;left:317px;position:absolute;font-size:45px;color:deeppink;display:none">English Lesson</div>
 
-<div id="word3" style="top:210px;left:317px;position:absolute;font-size:45px;color:black">PE Lesson</div>
+<div id="word3" style="top:110px;left:317px;position:absolute;font-size:45px;color:black;display:none">PE Lesson</div>
 
 <!-- <img id="pic1" src="pic/100.png" style="top:555px;left:17px;position:absolute" alt="picture 1"/> -->
 
@@ -183,7 +194,7 @@
 
     const threshold = 450.0;
     var i = 0;
-    var nowTime = 7.5;
+    var nowTime = 7.9;
     var gameInterval = 0.012;
     var refreshTime = 100;
     var liquid = 0;
@@ -262,32 +273,19 @@
         //console.log("delayMinute "+i+" "+delayMinute);
     }
 
-    var lessonsShow = "Timetable";
-    for (i = 0; i <= 6; i++) {
-        var word = "";
-        word = word + "[" + (i + 1) + "] " + transNumberToTimeMinute(startTimes[i]) + "---" + transNumberToTimeMinute(naturalEndTimes[i]) + "  ";
-        if (lessonNum[i] == 1) {
-            word = word + "Maths";
-        }
-        if (lessonNum[i] == 2) {
-            word = word + "English";
-        }
-        if (lessonNum[i] == 3) {
-            word = word + "PE";
-        }
-        if (i == 4) {
-            lessonsShow = lessonsShow + "\r\n" + "-----------------------";
-        }
-        lessonsShow = lessonsShow + "\r\n" + word;
-        //alert(i+" "+lessonsShow);
-        document.getElementById("lessonShowArea").innerText = lessonsShow;
 
-    }
 
     function goToliet() {
         if (liquid >= 150) {
             if (nowTime >= 7.5 && nowTime <= 17) {
-                wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid) + " liter";
+                if (gameLang==0){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid) + " liter";
+                }else if (gameLang==1){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " 去厕所，此时储存了 " + Math.trunc(liquid) + " 毫升";
+                }else if (gameLang==2){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " 吃了糖果，此时饥饿程度为 " + Math.trunc(liquid);
+                }
+
                 document.getElementById("wordShowArea").innerText = wordShow;
             }
             liquid = 0;
@@ -297,7 +295,15 @@
     function goTrousers() {
         if (liquid >= threshold) {
             if (nowTime >= 7.5 && nowTime <= 17) {
-                wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
+                if(gameLang==0){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid) + " liter";
+                }else if (gameLang==1){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " 尿裤子，此时储存了 " + Math.trunc(liquid) + " 毫升";
+                }else if (gameLang==2){
+                    wordShow = wordShow + "\r\n" + transNumberToTime(nowTime) + " 吃了苦瓜，此时饥饿程度为 " + Math.trunc(liquid);
+                }
+
+
                 document.getElementById("wordShowArea").innerText = wordShow;
             }
             liquid = 0;
@@ -311,24 +317,32 @@
 
     function interval() {
         nowTime = nowTime + gameInterval;
-        if (nowTime < 8 || nowTime > 17)
+        /*if (nowTime < 8 || nowTime > 17)
             gameInterval = 0.2;
         else if (canToilet) {
             gameInterval = 0.02;
         } else {
             gameInterval = 0.008;
         }
-
+		*/
         //gameInterval = 0.9;//test the end
         document.getElementById("timediv").innerText = transNumberToTime(nowTime);
         if (nowTime > 17) {
             clearInterval(t);
-
-            wordShow = wordShow + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore * 1000) / 1000).toString() + " and TrouesrsScore:" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
-
+            if(gameLang==0){
+                wordShow = wordShow + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore * 1000) / 1000).toString() + " and TrouesrsScore:" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+            }else if (gameLang==1){
+                wordShow = wordShow + "\r\n--------游戏结束，忍痛积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + " ，忍湿积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+            }else if (gameLang==2){
+                wordShow = wordShow + "\r\n--------游戏结束，忍饥积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + " ，忍苦积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+            }
             document.getElementById("wordShowArea").innerText = wordShow;
 
             var lessonsShow1 = "Timetable";
+
+            if (gameLang==1 || gameLang==2){
+                lessonsShow1 = "课程表";
+            }
             for (i = 0; i <= 6; i++) {
                 var span = false;
                 var word = "";
@@ -343,15 +357,20 @@
                 }
                 word = word + "[" + (i + 1) + "] " + transNumberToTimeMinute(startTimes[i]) + "---" + transNumberToTimeMinute(naturalEndTimes[i]) + "  ";
                 if (lessonNum[i] == 1) {
-                    word = word + "Maths";
+                    if (gameLang==0) {word = word + "Maths";}else {word = word + "数学";}
                 }
                 if (lessonNum[i] == 2) {
-                    word = word + "English";
+                    if (gameLang==0) {word = word + "English";}else {word = word + "英语";}
                 }
                 if (lessonNum[i] == 3) {
-                    word = word + "PE";
+                    if (gameLang==0) {word = word + "PE";}else {word = word + "体育";}
                 }
-                word = word + " end at " + transNumberToTime(endTimes[i]);
+                if (gameLang==0) {
+                    word = word + " end at " + transNumberToTime(endTimes[i]);
+                }
+                else{
+                    word = word + " 下课于 " + transNumberToTime(endTimes[i]);
+                }
                 if (span) {
                     word += "</span>"
                 }
@@ -480,7 +499,7 @@
         if (isPreEndLesson(nowTime) && liquid < 750) {
             nowGoTrousers = false;
         }
-        console.log(isPreEndLesson(nowTime) + "   " + liquid + "   " + nowTime);
+//console.log(isPreEndLesson(nowTime) + "   " + liquid + "   " + nowTime);
 
         if (nowGoTrousers) {
             goTrousers();
@@ -518,8 +537,132 @@
         }
         */
     }
+    var t;
+    function startGame(){
 
-    var t = setInterval(interval, refreshTime);
+        document.getElementById("choosediv").style["display"]="none";
+
+        var lessonsShow = "Timetable";
+        if (gameLang==1 || gameLang==2){
+            lessonsShow = "课程表";
+        }
+        for (i = 0; i <= 6; i++) {
+            var word = "";
+            word = word + "[" + (i + 1) + "] " + transNumberToTimeMinute(startTimes[i]) + "---" + transNumberToTimeMinute(naturalEndTimes[i]) + "  ";
+            if (lessonNum[i] == 1) {
+                if (gameLang==0) {word = word + "Maths";}else {word = word + "数学";}
+            }
+            if (lessonNum[i] == 2) {
+                if (gameLang==0) {word = word + "English";}else {word = word + "英语";}
+            }
+            if (lessonNum[i] == 3) {
+                if (gameLang==0) {word = word + "PE";}else {word = word + "体育";}
+            }
+            if (i == 4) {
+                lessonsShow = lessonsShow + "\r\n" + "-----------------------";
+            }
+            lessonsShow = lessonsShow + "\r\n" + word;
+            //alert(i+" "+lessonsShow);
+            document.getElementById("lessonShowArea").innerText = lessonsShow;
+
+        }
+
+        refreshTime=document.getElementById("chooseSpeed").value*1;
+
+        //alert(refreshTime);
+
+        gameInterval=document.getElementById("chooseInterval").value/3600;
+
+        //alert(gameInterval);
+        t = setInterval(interval, refreshTime);
+    }
+
+    var gameLang=0;
+    function switchLang(){
+        var lang=document.getElementById("chooseLang").value;
+        //alert(lang);
+        gameLang=lang;
+        if (lang==1){
+
+            document.getElementById("word01").innerText="上厕所间隔：";
+
+            document.getElementById("word02").innerText="液体：";
+
+            document.getElementById("word03").innerText="裤湿指数：";
+
+            document.getElementById("word04").innerText="忍湿积分：";
+
+            document.getElementById("word05").innerText="忍痛积分：";
+
+            document.getElementById("btnToliet").value="上厕所";
+
+            document.getElementById("btnTrousers").value="尿裤子";
+
+        }else if (lang==2){
+            document.getElementById("word01").innerText="饮食间隔：";
+
+            document.getElementById("word02").innerText="饥饿：";
+
+            document.getElementById("word03").innerText="苦味指数：";
+
+            document.getElementById("word04").innerText="忍苦积分：";
+
+            document.getElementById("word05").innerText="忍饥积分：";
+
+            document.getElementById("btnToliet").value="吃糖果";
+
+            document.getElementById("btnTrousers").value="吃苦瓜";
+        }else if (lang==0){
+            document.getElementById("word01").innerText="Interval:";
+
+            document.getElementById("word02").innerText="Liquid:";
+
+            document.getElementById("word03").innerText="Trousers:";
+
+            document.getElementById("word04").innerText="TroScore:";
+
+            document.getElementById("word05").innerText="PainScore:";
+
+            document.getElementById("btnToliet").value="toilet";
+
+            document.getElementById("btnTrousers").value="trousers";
+        }
+
+        if (lang==1 || lang==2){
+
+            document.getElementById("word1").innerText="数学课 上课中";
+
+            document.getElementById("word2").innerText="英语课 上课中";
+
+            document.getElementById("word3").innerText="体育课 上课中";
+
+            document.getElementById("span0").innerText="选择：";
+
+            document.getElementById("span1").innerText="游戏间隔：";
+
+            document.getElementById("span2").innerText="秒（每次刷新相当于游戏里多少时间）";
+
+            document.getElementById("span3").innerText="游戏速度：";
+
+            document.getElementById("span4").innerText="毫秒（每次刷新间隔多少时间）";
+        }else{
+            document.getElementById("word1").innerText="Maths Lesson";
+
+            document.getElementById("word2").innerText="English Lesson";
+
+            document.getElementById("word3").innerText="PE Lesson";
+
+            document.getElementById("span0").innerText="Choose:";
+
+            document.getElementById("span1").innerText="Game Interval:";
+
+            document.getElementById("span2").innerText="second (How many seconds of game time is per refresh)";
+
+            document.getElementById("span3").innerText="Game Speed:";
+
+            document.getElementById("span4").innerText="milliseconds (How many milliseconds of real time between refreshes)";
+        }
+    }
 </script>
 
 </body>
