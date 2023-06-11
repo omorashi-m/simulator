@@ -65,10 +65,10 @@
 </script>
 
 <div id="choosediv" style="top:10px;left:10px;position:absolute;font-size:20px"><span id="span0">Choose:</span>
-    <br> <label id="span1" for="chooseInterval">Game Interval: </label> <input id="chooseInterval" type="number" min="0" max="100" value="45"> <span id="span2">seconds (How many seconds of game time is per refresh)</span><br>
-    <label id="span3" for="chooseSpeed">Game Speed: </label><input id="chooseSpeed" type="number" min="0" max="100" value="100"> <span id="span4">milliseconds (How many milliseconds of real time between per refresh)</span><br>
-    <label id="label4lang" for="chooseLang">Language: </label>
-    <select id="chooseLang" onchange="switchLang()">
+    <br> <span id="span1">Game Interval: </span> <label for="chooseInterval"></label><input id="chooseInterval" type="number" min="0" max="100" value="45"> <span id="span2">seconds (How many seconds of game time is per refresh)</span><br>
+    <span id="span3">Game Speed: </span><label for="chooseSpeed"></label><input id="chooseSpeed" type="number" min="0" max="100" value="100"> <span id="span4">milliseconds (How many milliseconds of real time between per refresh)</span><br>
+    Language:
+    <label for="chooseLang"></label><select id="chooseLang" onchange="switchLang()">
         <option value="0">English</option>
         <option value="1">Chinese</option>
         <option value="2">Chinese(Sweet)</option>
@@ -259,9 +259,9 @@
     for (i = 0; i <= 6; i++) {
         var delayMinuteArr;
         if (lessonNum[i] == 1) {
-            delayMinuteArr = [0, 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.2, 1.4, 2, 3, 4, 7, 10, 15, 20, 25];
+            delayMinuteArr = [0, 0,0.05, 0.1, 0.15,0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.2, 1.4, 1.8,2,2.6,2.8, 3, 3.8,4, 4.5,7, 10, 15, 20, 25];
         } else if (lessonNum[i] == 2) {
-            delayMinuteArr = [0, 2, 4, 6, 7, 8, 8.5, 8.8, 9, 9.5, 10, 12, 15, 25, 35];
+            delayMinuteArr = [0, 2, 4, 6, 7, 8, 8.5, 10, 11,12, 15, 25, 35];
         } else {
             delayMinuteArr = [0, 0, 0];
         }
@@ -289,6 +289,7 @@
                 document.getElementById("wordShowArea").innerText = wordShow;
             }
             liquid = 0;
+            lastTolietInterval=0;
         }
     }
 
@@ -309,11 +310,12 @@
             liquid = 0;
             trousers = 1;
             troScore += 100;
+            lastTolietInterval=-1;
         }
     }
 
     // var lastCalTolietTime = 0;
-    var lastToiletInterval = 0.7;
+    var lastTolietInterval = -1;
 
     function interval() {
         nowTime = nowTime + gameInterval;
@@ -384,18 +386,18 @@
             }
         }
 
-        //var tolietIntervalArr = [1.5,  2.5, 2.8, 3.2, 3.5, 3.6,3.7,3.8,3.9,3.95, 4,4.1,4.2,4.5, 5,6];
-        //var tolietIntervalArr = [0.5,0.8,1,1.5,2.5];
-        var tolietIntervalArr = [-0.16, -0.15, -0.13, -0.1, -0.09, -0.08, -0.07, -0.05, -0.02, -0.015, -0.01, -0.005, 0, 0.1, 0.2, 0.3, 0.4, 0.45];
+        var tolietIntervalArr = [0.5,0.6,0.7,0.75,0.77,0.8,0.85,0.88,0.9,0.95,1,1.5,2 ];
+        //var tolietIntervalArr = [-0.16, -0.15, -0.13, -0.1, -0.09, -0.08, -0.07, -0.05, -0.02, -0.015, -0.01, -0.005, 0, 0.1, 0.2, 0.3, 0.4, 0.45];
         var tolietInterval;//= lastToiletInterval;
-        /*   if (Math.trunc(nowTime)!=lastCalTolietTime){
-               tolietInterval = getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
-               lastToiletInterval=tolietInterval;
-               lastCalTolietTime=Math.trunc(nowTime);
-           }
-      */
+        if (lastTolietInterval>0){
+            tolietInterval = lastTolietInterval;
+        }else{
+            tolietInterval = getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+            lastTolietInterval=tolietInterval;
+        }
 
-        tolietInterval = lastToiletInterval + getRandomTime(tolietIntervalArr, randomNum + 9 + nowTime);
+
+
         if (tolietInterval > 2) {
             tolietInterval = 2;
         }
@@ -419,7 +421,7 @@
         document.getElementById("trousersScorediv").innerText = (Math.trunc(troScore * 1000) / 1000).toString();
 
         if (liquid >= threshold)
-            paintScore = paintScore + 10 * (liquid - threshold) * gameInterval;
+            paintScore = paintScore + (liquid - threshold) * gameInterval;
         document.getElementById("paintScorediv").innerText = (Math.trunc(paintScore * 1000) / 1000).toString();
 
         canToilet = true;
@@ -476,11 +478,11 @@
         if (liquid >= 350 && canToilet) {
             nowGoToliet = true;
         }
-        if (liquid >= 200 && canToilet && nowTime > 8.1 && nowTime < 15 && !inLesson) {
+        if (liquid >= 230 && canToilet && nowTime > 8.1 && nowTime < 15 && !inLesson) {
             nowGoToliet = true;
         }
 
-        if (liquid > 150 && isPrepareLesson(nowTime) && canToilet) {
+        if (liquid > 230 && isPrepareLesson(nowTime) && canToilet) {
             nowGoToliet = true;
         }
         if (nowGoToliet) {
@@ -493,7 +495,7 @@
         if (liquid > 650 && !canToilet) {
             nowGoTrousers = true;
         }
-        if (liquid > 500 && isStartLesson(nowTime)) {
+        if (liquid > threshold && isStartLesson(nowTime)) {
             nowGoTrousers = true;
         }
         if (isPreEndLesson(nowTime) && liquid < 750) {
@@ -628,7 +630,9 @@
             document.getElementById("btnTrousers").value="trousers";
         }
 
+
         if (lang==1 || lang==2){
+
 
             document.getElementById("word1").innerText="数学课 上课中";
 
@@ -660,8 +664,9 @@
 
             document.getElementById("span3").innerText="Game Speed:";
 
-            document.getElementById("span4").innerText="milliseconds (How many milliseconds of real time between refreshes)";
+            document.getElementById("span4").innerText="milliseconds (How many milliseconds of real time between per refresh)";
         }
+
     }
 </script>
 
