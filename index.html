@@ -86,18 +86,25 @@
 
 <div id="word02" style="top:300px;left:17px;position:absolute;font-size:45px">Liquid:</div>
 
-<div id="liquiddiv" style="top:300px;left:217px;position:absolute;font-size:45px">0</div>
+<div id="liquiddiv" style="top:280px;left:217px;position:absolute;font-size:30px">0</div>
+
+<div id="liquiddiv2" style="top:340px;left:217px;position:absolute;font-size:30px">0</div>
 
 <div id="word03" style="top:300px;left:517px;position:absolute;font-size:45px">Trousers:</div>
 
-<div id="trousersdiv" style="top:300px;left:817px;position:absolute;font-size:45px">0</div>
+<div id="trousersdiv" style="top:280px;left:817px;position:absolute;font-size:30px">0</div>
+
+<div id="trousersdiv2" style="top:340px;left:817px;position:absolute;font-size:30px">0</div>
 
 <div id="word04" style="top:400px;left:517px;position:absolute;font-size:45px">TroScore:</div>
 
-<div id="trousersScorediv" style="top:400px;left:817px;position:absolute;font-size:45px">0</div>
+<div id="trousersScorediv" style="top:380px;left:817px;position:absolute;font-size:30px">0</div>
 
+<div id="trousersScorediv2" style="top:430px;left:817px;position:absolute;font-size:30px">0</div>
 
-<div id="paintScorediv" style="top:400px;left:267px;position:absolute;font-size:45px">0</div>
+<div id="paintScorediv" style="top:380px;left:267px;position:absolute;font-size:30px">0</div>
+
+<div id="paintScorediv2" style="top:430px;left:267px;position:absolute;font-size:30px">0</div>
 
 <div id="word05" style="top:400px;left:17px;position:absolute;font-size:45px">PainScore:</div>
 
@@ -111,11 +118,14 @@
 
 <!-- <img id="pic2" src="pic/T00.png" style="top:555px;left:517px;position:absolute" alt="picture 2"/> -->
 
-<div id="wordShowArea" style="top:550px;left:117px;position:absolute;font-size:25px;"></div>
+<div id="wordShowArea" style="top:550px;left:117px;position:absolute;font-size:20px;"></div>
 
-<div id="lessonShowArea" style="top:550px;left:617px;position:absolute;font-size:25px;"></div>
+<div id="wordShowArea2" style="top:550px;left:617px;position:absolute;font-size:20px;"></div>
 
 
+<div id="lessonShowArea" style="top:200px;left:1117px;position:absolute;font-size:25px;"></div>
+
+<!--
 <div id="tolietBtnDiv" style="top:500px;left:117px;position:absolute;font-size:20px;">
     <input type="button" id="btnToliet" value="toilet" onclick="goToliet()" style="height:30px;width:70px;">
 </div>
@@ -123,7 +133,7 @@
 <div id="trousersBtnDiv" style="top:500px;left:417px;position:absolute;font-size:20px;">
     <input type="button" id="btnTrousers" value="trousers" onclick="goTrousers()" style="height:30px;width:70px;">
 </div>
-
+-->
 <div id="intvldiv"
      style="top:200px;left:1050px;height:60px;width:30px;position:absolute;border:2px solid red;background:red">
     <!--111--></div>
@@ -202,8 +212,12 @@
     var troScore = 0;
     var canToilet = true;
     var wordShow = "";
+    var wordShow2 = "";
     var paintScore = 0;
-
+    var liquid2 = 0;
+    var trousers2 = 0;
+    var troScore2 = 0;
+    var paintScore2 = 0;
     var lessonNum = [];
     var PELesson = Math.trunc(random(randomNum, 12) * 7);
     //console.log("PE="+PELesson);
@@ -292,7 +306,23 @@
             lastTolietInterval=0;
         }
     }
+    function goToliet2() {
+        if (liquid2 >= 150) {
+            if (nowTime >= 7.5 && nowTime <= 17) {
+                if (gameLang==0){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " go to toliet with " + Math.trunc(liquid2) + " liter";
+                }else if (gameLang==1){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " 去厕所，此时储存了 " + Math.trunc(liquid2) + " 毫升";
+                }else if (gameLang==2){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " 吃了糖果，此时饥饿程度为 " + Math.trunc(liquid2);
+                }
 
+                document.getElementById("wordShowArea2").innerText = wordShow2;
+            }
+            liquid2 = 0;
+            lastTolietInterval2=0;
+        }
+    }
     function goTrousers() {
         if (liquid >= threshold) {
             if (nowTime >= 7.5 && nowTime <= 17) {
@@ -314,9 +344,34 @@
         }
     }
 
+    function goTrousers2() {
+        if (liquid2 >= threshold) {
+            if (nowTime >= 7.5 && nowTime <= 17) {
+                if(gameLang==0){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " piss on trousers with " + Math.trunc(liquid2) + " liter";
+                }else if (gameLang==1){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " 尿裤子，此时储存了 " + Math.trunc(liquid2) + " 毫升";
+                }else if (gameLang==2){
+                    wordShow2 = wordShow2 + "\r\n" + transNumberToTime(nowTime) + " 吃了苦瓜，此时饥饿程度为 " + Math.trunc(liquid2);
+                }
+
+
+                document.getElementById("wordShowArea2").innerText = wordShow2;
+            }
+            liquid2 = 0;
+            trousers2 = 1;
+            troScore2 += 100;
+            lastTolietInterval2	=-1;
+        }
+    }
+
+
+
+
+
     // var lastCalTolietTime = 0;
     var lastTolietInterval = -1;
-
+    var lastTolietInterval2 = -1;
     function interval() {
         nowTime = nowTime + gameInterval;
         /*if (nowTime < 8 || nowTime > 17)
@@ -332,13 +387,24 @@
         if (nowTime > 17) {
             clearInterval(t);
             if(gameLang==0){
-                wordShow = wordShow + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore * 1000) / 1000).toString() + " and TrouesrsScore:" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+                wordShow = wordShow + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore * 1000) / 1000).toString() + "\r\n and TrouesrsScore:" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
             }else if (gameLang==1){
-                wordShow = wordShow + "\r\n--------游戏结束，忍痛积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + " ，忍湿积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+                wordShow = wordShow + "\r\n--------游戏结束，忍痛积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + "\r\n ，忍湿积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
             }else if (gameLang==2){
-                wordShow = wordShow + "\r\n--------游戏结束，忍饥积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + " ，忍苦积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
+                wordShow = wordShow + "\r\n--------游戏结束，忍饥积分：" + (Math.trunc(paintScore * 1000) / 1000).toString() + "\r\n ，忍苦积分" + (Math.trunc(troScore * 1000) / 1000).toString() + "---------";
             }
             document.getElementById("wordShowArea").innerText = wordShow;
+
+            if(gameLang==0){
+                wordShow2 = wordShow2 + "\r\n--------game end with PainScore:" + (Math.trunc(paintScore2 * 1000) / 1000).toString() + "\r\n and TrouesrsScore:" + (Math.trunc(troScore2 * 1000) / 1000).toString() + "---------";
+            }else if (gameLang==1){
+                wordShow2 = wordShow2 + "\r\n--------游戏结束，忍痛积分：" + (Math.trunc(paintScore2 * 1000) / 1000).toString() + "\r\n ，忍湿积分" + (Math.trunc(troScore2 * 1000) / 1000).toString() + "---------";
+            }else if (gameLang==2){
+                wordShow2 = wordShow2 + "\r\n--------游戏结束，忍饥积分：" + (Math.trunc(paintScore2 * 1000) / 1000).toString() + "\r\n ，忍苦积分" + (Math.trunc(troScore2 * 1000) / 1000).toString() + "---------";
+            }
+            document.getElementById("wordShowArea2").innerText = wordShow2;
+
+
 
             var lessonsShow1 = "Timetable";
 
@@ -386,7 +452,8 @@
             }
         }
 
-        var tolietIntervalArr = [0.5,0.6,0.7,0.75,0.77,0.8,0.85,0.88,0.9,0.95,1,1.5,2 ];
+        var tolietIntervalArr = [0.5,0.6,0.7,0.75,0.77,0.8,0.85,0.88,0.9,0.95,1,1.5,1.7,2 ];
+        var tolietIntervalArr2 = [0.3,0.4,0.5,0.6,0.7,0.8,1,1.05,1.1,1.2,1.3,1.4,1.5,2,2.5 ];
         //var tolietIntervalArr = [-0.16, -0.15, -0.13, -0.1, -0.09, -0.08, -0.07, -0.05, -0.02, -0.015, -0.01, -0.005, 0, 0.1, 0.2, 0.3, 0.4, 0.45];
         var tolietInterval;//= lastToiletInterval;
         if (lastTolietInterval>0){
@@ -396,7 +463,13 @@
             lastTolietInterval=tolietInterval;
         }
 
-
+        var tolietInterval2;
+        if (lastTolietInterval2>0){
+            tolietInterval2 = lastTolietInterval2;
+        }else{
+            tolietInterval2 = getRandomTime(tolietIntervalArr2, randomNum + 11 + nowTime);
+            lastTolietInterval2=tolietInterval2;
+        }
 
         if (tolietInterval > 2) {
             tolietInterval = 2;
@@ -404,14 +477,23 @@
         if (tolietInterval < 0.4) {
             tolietInterval = 0.4;
         }
-
+        if (tolietInterval2 > 2) {
+            tolietInterval2 = 2;
+        }
+        if (tolietInterval2 < 0.4) {
+            tolietInterval2 = 0.4;
+        }
         document.getElementById("Intervaldiv").innerText = (Math.trunc(tolietInterval * 1000) / 1000).toString();
         setInvlTop(tolietInterval * 60);
 
         liquid = liquid + 350 / tolietInterval * gameInterval;
-        document.getElementById("btnTrousers").disabled = (liquid < threshold);
+        //document.getElementById("btnTrousers").disabled = (liquid < threshold);
         document.getElementById("liquiddiv").innerText = Math.trunc(liquid).toString();
         setLiquidTop(liquid * 0.25);
+
+        liquid2 = liquid2 + 350 / tolietInterval2 * gameInterval;
+        //document.getElementById("btnTrousers").disabled = (liquid < threshold);
+        document.getElementById("liquiddiv2").innerText = Math.trunc(liquid2).toString();
 
         trousers = trousers - 1 / 5 * gameInterval;
         if (trousers < 0) trousers = 0;
@@ -420,10 +502,21 @@
         troScore = troScore + trousers * gameInterval * 60;
         document.getElementById("trousersScorediv").innerText = (Math.trunc(troScore * 1000) / 1000).toString();
 
+        trousers2 = trousers2 - 1 / 5 * gameInterval;
+        if (trousers2 < 0) trousers2 = 0;
+
+        document.getElementById("trousersdiv2").innerText = (Math.trunc(trousers2 * 1000) / 1000).toString();
+        troScore2 = troScore2 + trousers2 * gameInterval * 60;
+        document.getElementById("trousersScorediv2").innerText = (Math.trunc(troScore2 * 1000) / 1000).toString();
+
+
+
         if (liquid >= threshold)
             paintScore = paintScore + (liquid - threshold) * gameInterval;
         document.getElementById("paintScorediv").innerText = (Math.trunc(paintScore * 1000) / 1000).toString();
-
+        if (liquid2 >= threshold)
+            paintScore2 = paintScore2 + (liquid2 - threshold) * gameInterval;
+        document.getElementById("paintScorediv2").innerText = (Math.trunc(paintScore2 * 1000) / 1000).toString();
         canToilet = true;
         /*if (nowTime >= carryTime && nowTime <= endTime) {
             document.getElementById("word1").style.display = "block";
@@ -489,7 +582,23 @@
             goToliet()
         }
 
-        document.getElementById("btnToliet").disabled = !canToilet;
+        var nowGoToliet2 = false;
+        if (liquid2 >= 350 && canToilet) {
+            nowGoToliet2 = true;
+        }
+        if (liquid2 >= 230 && canToilet && nowTime > 8.1 && nowTime < 15 && !inLesson) {
+            nowGoToliet2 = true;
+        }
+
+        if (liquid > 230 && isPrepareLesson(nowTime) && canToilet) {
+            nowGoToliet2 = true;
+        }
+        if (nowGoToliet2) {
+            goToliet2()
+        }
+
+
+        //document.getElementById("btnToliet").disabled = !canToilet;
 
         var nowGoTrousers = false;
         if (liquid > 650 && !canToilet) {
@@ -506,6 +615,23 @@
         if (nowGoTrousers) {
             goTrousers();
         }
+
+        var nowGoTrousers2 = false;
+        if (liquid2 > 650 && !canToilet) {
+            nowGoTrousers2 = true;
+        }
+        if (liquid2 > threshold && isStartLesson(nowTime)) {
+            nowGoTrousers2 = true;
+        }
+        if (isPreEndLesson(nowTime) && liquid2 < 750) {
+            nowGoTrousers2 = false;
+        }
+//console.log(isPreEndLesson(nowTime) + "   " + liquid + "   " + nowTime);
+
+        if (nowGoTrousers2) {
+            goTrousers2();
+        }
+
         /*
         if (liquid >= 0 && liquid <= 100) {
             document.getElementById("pic1").src = "pic/100.png";
@@ -596,9 +722,9 @@
 
             document.getElementById("word05").innerText="忍痛积分：";
 
-            document.getElementById("btnToliet").value="上厕所";
+            //document.getElementById("btnToliet").value="上厕所";
 
-            document.getElementById("btnTrousers").value="尿裤子";
+            //document.getElementById("btnTrousers").value="尿裤子";
 
         }else if (lang==2){
             document.getElementById("word01").innerText="饮食间隔：";
@@ -611,9 +737,9 @@
 
             document.getElementById("word05").innerText="忍饥积分：";
 
-            document.getElementById("btnToliet").value="吃糖果";
+            //document.getElementById("btnToliet").value="吃糖果";
 
-            document.getElementById("btnTrousers").value="吃苦瓜";
+            //document.getElementById("btnTrousers").value="吃苦瓜";
         }else if (lang==0){
             document.getElementById("word01").innerText="Interval:";
 
@@ -625,9 +751,9 @@
 
             document.getElementById("word05").innerText="PainScore:";
 
-            document.getElementById("btnToliet").value="toilet";
+            //document.getElementById("btnToliet").value="toilet";
 
-            document.getElementById("btnTrousers").value="trousers";
+            //	document.getElementById("btnTrousers").value="trousers";
         }
 
 
